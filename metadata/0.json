@@ -1,0 +1,23 @@
+{
+  "name": "DeFi NFT #0",
+  "description": "A unique NFT from the DeFi NFT Collection with staking capabilities",
+  "image": "ipfs://QmYourImageHash/0.png",
+  "attributes": [
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Background",
+      "value": "Blue"
+    },
+    {
+      "trait_type": "Character",
+      "value": "Warrior"
+    },
+    {
+      "trait_type": "Weapon",
+      "value": "Sword"
+    }
+  ]
+}
