@@ -1,8 +1,8 @@
 // Contract addresses - Update these after deployment
 const CONTRACTS = {
-    NFTCollection: '0xYourNFTCollectionAddress',
-    RewardToken: '0xYourRewardTokenAddress',
-    NFTStaking: '0xYourNFTStakingAddress'
+    NFTCollection: '0x7a3F8c7d6828e9a149E0186173C49cF93fff72a0',
+    RewardToken: '0x7BaD55DE662E0a90BEf1cd233D2F5D6aBCC7dD2D',
+    NFTStaking: '0x413808Af69b084A4e8EfbEC3478f14dd3e8D8a43'
 };
 
 // ABIs - Simplified for frontend (include only needed functions)
@@ -39,6 +39,16 @@ const TOKEN_ABI = [
 let provider, signer, userAddress;
 let nftContract, stakingContract, tokenContract;
 
+// Wait for ethers to load
+window.addEventListener('load', () => {
+    if (typeof ethers === 'undefined') {
+        console.error('Ethers.js failed to load!');
+        alert('Error: Ethers.js library failed to load. Please refresh the page.');
+    } else {
+        console.log('Ethers.js loaded successfully');
+    }
+});
+
 // Theme Toggle
 const themeToggle = document.getElementById('themeToggle');
 const body = document.body;
@@ -73,15 +83,22 @@ function updateThemeIcon() {
 // Connect Wallet
 document.getElementById('connectWallet').addEventListener('click', async () => {
     try {
+        console.log('Connect wallet clicked');
+        
         if (typeof window.ethereum === 'undefined') {
             alert('Please install MetaMask!');
             return;
         }
 
+        console.log('Requesting accounts...');
         await window.ethereum.request({ method: 'eth_requestAccounts' });
+        
+        console.log('Creating provider...');
         provider = new ethers.providers.Web3Provider(window.ethereum);
         signer = provider.getSigner();
         userAddress = await signer.getAddress();
+        
+        console.log('Connected address:', userAddress);
 
         // Initialize contracts
         nftContract = new ethers.Contract(CONTRACTS.NFTCollection, NFT_ABI, signer);
@@ -90,7 +107,7 @@ document.getElementById('connectWallet').addEventListener('click', async () => {
 
         // Update UI
         document.getElementById('connectWallet').style.display = 'none';
-        document.getElementById('walletInfo').style.display = 'block';
+        document.getElementById('walletInfo').style.display = 'flex';
         document.getElementById('walletAddress').textContent = 
             userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
 
@@ -104,29 +121,32 @@ document.getElementById('connectWallet').addEventListener('click', async () => {
         // Load data
         await loadData();
 
-        showStatus('mintStatus', 'Wallet connected successfully!', 'success');
+        console.log('Wallet connected successfully!');
     } catch (error) {
-        console.error(error);
-        showStatus('mintStatus', 'Failed to connect wallet: ' + error.message, 'error');
+        console.error('Connection error:', error);
+        alert('Failed to connect wallet: ' + error.message);
     }
 });
 
 // Mint NFT
 document.getElementById('mintBtn').addEventListener('click', async () => {
     try {
-        showStatus('mintStatus', 'Minting NFT...', 'info');
+        console.log('Minting NFT...');
+        alert('Minting NFT... Please confirm the transaction in MetaMask.');
         
         const mintPrice = ethers.utils.parseEther('0.01');
         const tx = await nftContract.publicMint({ value: mintPrice });
         
-        showStatus('mintStatus', 'Transaction submitted. Waiting for confirmation...', 'info');
+        console.log('Transaction submitted:', tx.hash);
+        alert('Transaction submitted! Waiting for confirmation...');
         await tx.wait();
         
-        showStatus('mintStatus', 'NFT minted successfully!', 'success');
+        console.log('NFT minted successfully!');
+        alert('NFT minted successfully!');
         await loadData();
     } catch (error) {
-        console.error(error);
-        showStatus('mintStatus', 'Minting failed: ' + error.message, 'error');
+        console.error('Minting error:', error);
+        alert('Minting failed: ' + (error.reason || error.message));
     }
 });
 
@@ -325,24 +345,33 @@ async function unstakeNFT(tokenId) {
 // Claim rewards for specific NFT
 async function claimRewards(tokenId) {
     try {
-        showStatus('stakingStatus', 'Claiming rewards...', 'info');
+        console.log('Claiming rewards for token:', tokenId);
         
         const tx = await stakingContract.claimRewards(tokenId);
+        console.log('Claim transaction:', tx.hash);
+        
+        alert('Claiming rewards... Please wait for confirmation.');
         await tx.wait();
 
-        showStatus('stakingStatus', 'Rewards claimed successfully!', 'success');
+        console.log('Rewards claimed successfully!');
+        alert('Rewards claimed successfully!');
         await loadData();
     } catch (error) {
-        console.error(error);
-        showStatus('stakingStatus', 'Claim failed: ' + error.message, 'error');
+        console.error('Claim error:', error);
+        alert('Claim failed: ' + (error.reason || error.message));
     }
 }
 
 // Show status message
 function showStatus(elementId, message, type) {
     const statusEl = document.getElementById(elementId);
+    if (!statusEl) {
+        console.log(`Status (${type}):`, message);
+        return;
+    }
     statusEl.textContent = message;
     statusEl.className = `status ${type}`;
+    statusEl.style.display = 'block';
     
     if (type === 'success' || type === 'error') {
         setTimeout(() => {

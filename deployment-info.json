@@ -1,15 +1,17 @@
 {
-  "network": "localhost",
-  "deployer": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-  "timestamp": "2026-02-10T20:04:35.461Z",
+  "network": "sepolia",
+  "deployer": "0x1c2BA57053B71CCebC195c20deC1189b0ddE7c63",
+  "timestamp": "2026-02-11T16:58:34.280Z",
   "contracts": {
-    "NFTCollection": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-    "RewardToken": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-    "NFTStaking": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"
+    "NFTCollection": "0x7a3F8c7d6828e9a149E0186173C49cF93fff72a0",
+    "RewardToken": "0x7BaD55DE662E0a90BEf1cd233D2F5D6aBCC7dD2D",
+    "NFTStaking": "0x413808Af69b084A4e8EfbEC3478f14dd3e8D8a43",
+    "MockVRFCoordinator": "0xa84eD0c3e02800e745e197Ee45C04c785835A639"
   },
   "vrfConfig": {
-    "coordinator": "0x8103B0A8A00be2DDC778e6e7eaa21791Cd364625",
+    "coordinator": "0xa84eD0c3e02800e745e197Ee45C04c785835A639",
     "keyHash": "0x474e34a077df58807dbe9c96d3c009b23b3c6d0cce433e59bbf5b34f823bc56c",
-    "subscriptionId": 1
+    "subscriptionId": 1,
+    "note": "Using MockVRFCoordinatorV2 for testing"
   }
 }
