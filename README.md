@@ -8,6 +8,21 @@ A comprehensive NFT project featuring ERC-721 tokens with integrated DeFi stakin
 
 ##  Quick Start
 
+---
+
+## Screenshots
+
+![Screenshot 1](/screenshots/NFT01.PNG)
+
+![Screenshot 2](/screenshots/STAKING01.PNG)
+
+![Screenshot 3](/screenshots/NFT02.PNG)
+
+![Screenshot 4](/screenshots/STAKING02.PNG)
+
+---
+
+
 
 ### Run Tests (Git Bash)
 
